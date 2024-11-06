@@ -40,7 +40,6 @@ async function updateAppId(appId) {
     const projectPath = path.join(projectDir, "project.config.json");
     let data = await fs.promises.readFile(projectPath, "utf8");
     let jsonData = JSON.parse(data);
-    jsonData.setting.appid = appId;
     jsonData.appid = appId;
     await fs.promises.writeFile(projectPath, JSON.stringify(jsonData, null, 2));
     console.log(`更新 appId 为 ${appId} 成功`);
