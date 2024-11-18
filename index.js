@@ -8,17 +8,15 @@ const cli = "/Applications/wechatwebdevtools.app/Contents/MacOS/cli";
 // const cli = "开发工具安装位置/cli.bat";
 
 // 当前小程序项目地址（替换成自己的）
-const projectDir = "/xxxx/xxxx";
+const projectDir = "/Users/xxxx";
 
-// 定义当前版本号
-const VERSION = "1.0.0";
-// 定义当前版本代码的说明
-const UPDATE_MESSAGE = "init msg";
+// 更新信息模板
+const UPDATE_MESSAGE_TEMPLATE = "fix bug";
 
 // 定义当前需要上传的小程序
 const list = [
-  { appId: "appId1", appName: "小程序名称1" },
-  { appId: "appId2", appName: "小程序名称2" },
+  { appId: "xxx", appName: "xxx", version: "1.0.1" },
+  { appId: "xxx", appName: "xxx", version: "1.0.2" },
 ];
 
 // 窗口执行命令工具方法
@@ -67,20 +65,22 @@ async function main() {
     // 批量上传小程序
     for (let item of list) {
       try {
-        console.log(`开始上传小程序：${item.appName}（appId: ${item.appId})`);
+        console.log(`开始上传小程序：${item.appName}（appId: ${item.appId}，version: ${item.version}）`);
 
         console.log("步骤 1：更新 project.config.json 中的 appId...");
         await updateAppId(item.appId);
 
+        const UPDATE_MESSAGE = `版本号: ${item.version} --> ${UPDATE_MESSAGE_TEMPLATE}`;
+
         console.log("步骤 2：上传代码审核...");
         const uploadResult = await exec(
-          `${cli} upload --project ${projectDir} -v ${VERSION} -d ${UPDATE_MESSAGE}`
+          `${cli} upload --project ${projectDir} -v ${item.version} -d ${UPDATE_MESSAGE}`
         );
         console.log(uploadResult);
 
-        console.log(`小程序 ${item.appName}（appId: ${item.appId}) 上传完成`);
+        console.log(`小程序 ${item.appName}（appId: ${item.appId}）上传完成`);
       } catch (err) {
-        console.error(`上传小程序 ${item.appName}（appId: ${item.appId}) 时发生错误: `, err);
+        console.error(`上传小程序 ${item.appName}（appId: ${item.appId}）时发生错误: `, err);
       }
     }
 
